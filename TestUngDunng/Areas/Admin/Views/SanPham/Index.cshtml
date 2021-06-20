@@ -1,0 +1,83 @@
+﻿@using PagedList.Mvc
+@using PagedList
+@model PagedList.IPagedList<ModelEF.Model.Product>
+@{
+    ViewBag.Title = "Quản lý sản phẩm";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+@section header{
+    <i class="fa fa-user"></i>&nbsp;Quản lý sản phẩm
+}
+
+@using (Html.BeginForm("Index", "SanPham", FormMethod.Post))
+{
+    <div class="col-lg-12 form-group">
+        <div class="col-md-6">
+            <p>
+                @Html.ActionLink("Thêm Sản Phẩm", "Create", "SanPham", new { @class = "btn btn-danger" })
+            </p>
+
+        </div>
+        <div class="col-md-6">
+            <p>
+                <i class="fa fa-home" style="color:#2e6082"> </i> @Html.ActionLink("Quay lại","Index","Home")  
+            </p>
+
+        </div>
+        
+        
+    </div>
+}
+<div class="col-lg-12 form-group">
+    <table class="table">
+        <tr>
+            <th>ID</th>
+            <th>
+                Tên Sản Phẩm
+            </th>
+            <th>
+                Đơn giá
+            </th>
+            <th>
+                Số lượng
+            </th>
+            <th>
+                LoaiSP_ID
+            </th>
+            <th>
+                Thao tác
+            </th>
+        </tr>
+        @{ var i = 1;}
+        @foreach (var item in Model)
+        {
+            int id = item.proID;
+            long giaban = Convert.ToInt32(item.UnitCost);
+            <tr id="row_@item.Name">
+              
+                <td>
+                    @item.proID
+                </td>
+
+                <td>
+                    @item.Name
+                </td>
+                <td>
+                   @giaban
+                </td>
+                <td>
+                    @item.quantity
+                </td>
+                <td>
+                    @item.CateID
+                </td>
+                <td>
+                   @Html.ActionLink("Details","Details",new { id=item.proID})
+                </td>
+            </tr>
+            i++;
+        }
+    </table>
+    @Html.PagedListPager((IPagedList)Model, page => Url.Action("Index", new { page, @searchString = @ViewBag.SearchString }))
+</div>

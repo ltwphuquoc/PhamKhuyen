@@ -1,0 +1,84 @@
+﻿@using PagedList.Mvc
+@using PagedList
+@model PagedList.IPagedList<ModelEF.Model.UserAcount>
+@{
+    ViewBag.Title = "Quản lý người dùng";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+@section header{
+    <i class="fa fa-user"></i>&nbsp;Quản lý người dùng
+}
+
+@using (Html.BeginForm("Index", "User", FormMethod.Post))
+{
+    <div class="col-lg-12 form-group">
+        <div class="col-md-6">
+           
+
+        </div>
+        <div class="col-md-6">
+            <p>
+                <a style=" color:darkgreen" href="@Url.Action("Index","Home")" )"><i class="fa fa-home"> Quay lại</i></a>
+            </p>
+
+        </div>
+        <div class="col-md-4">
+            <input type="text" value=" @ViewBag.SearchString" name="searchstring" placeholder="Nhập từ khoá cần tìm" class="form-control" />
+        </div>
+        <div class="col-md-2">
+            <input type="submit" value="Tìm Kiếm" class="btn btn-danger" />
+        </div>
+    </div>
+}
+<div class="col-lg-12 form-group">
+    <table class="table">
+        <tr>
+            <th>Thao tác</th>
+            <th>STT</th>
+
+            <th>
+                Tên đăng nhập
+            </th>
+            <th>
+                Mật khẩu
+            </th>
+            <th>
+                Trạng thái
+            </th>
+
+        </tr>
+        @{ var i = 1;}
+        @foreach (var item in Model)
+        {
+        <tr id="row_@item.UserName">
+            <td>
+              @if(item.Status.Contains("Blocked"))
+                { <i class="fa fa-cut"></i>
+                  @Ajax.ActionLink("Xoá", "Delete", new { @userName = item.UserName }, new AjaxOptions
+           {
+               Confirm = "Bạn có muốn xoá người dùng này không?",
+               OnComplete = "$('#row_" + @item.UserName + "').remove()",
+               HttpMethod = "Delete"
+           })   
+               } 
+            </td>
+            <td>
+                @i
+            </td>
+
+            <td>
+                @item.UserName
+            </td>
+            <td>
+                @item.Password
+            </td>
+            <td>
+                @item.Status
+            </td>
+        </tr>
+            i++;
+        }
+    </table>
+    @Html.PagedListPager((IPagedList)Model, page => Url.Action("Index", new { page, @searchString = @ViewBag.SearchString }))
+</div>

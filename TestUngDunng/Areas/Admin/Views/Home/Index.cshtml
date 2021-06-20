@@ -1,0 +1,12 @@
+﻿
+@{
+                /**/
+
+                ViewBag.Title = "Index";
+                Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+@section Header{
+    <i class="fa fa-home">&nbsp; Trang Chủ</i>}
+<td><a style="color:darkgray; font-size=40" href="@Url.Action("Index","User")">Người dùng</a></td>
+<td><a style="color:darkgray; font-size=40" href="@Url.Action("Index","SanPham")">||&nbsp Sản phẩm</a></td>
+
